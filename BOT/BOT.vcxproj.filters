@@ -50,6 +50,9 @@
     <ClCompile Include="Clicker.cpp">
       <Filter>Pliki źródłowe\Programs</Filter>
     </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Pliki źródłowe\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h">
