@@ -18,7 +18,7 @@ void IconFinder::addPoint() {
 }
 
 void IconFinder::captureRect() {
-    int pSize = _points.size();
+    auto pSize = _points.size();
     if (pSize < 2) {
         Logger::error("IconFinder::captureRect()", "two points have to be added!");
         return;
