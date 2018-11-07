@@ -21,6 +21,7 @@ public:
     void onLeftMouseClick(Callback cb = {});
     void onRightMouseClick(Callback cb = {});
     void onKeyPressed(char key, Callback cb = {});
+    void onAnyKeyPressed(std::function<void(char)> cb);
 
 private:
     static void run();
@@ -31,6 +32,7 @@ private:
 
     static const int MAX_KEYS = 256;
     static std::array<std::vector<Callback>, MAX_KEYS> _callbacks;
+    static std::function<void(char)> _anyKeyPressedCallback;
     static std::array<std::chrono::time_point<std::chrono::system_clock>, MAX_KEYS> _lastPerform;
 
     static bool _shouldRun;

@@ -7,6 +7,28 @@ Mouse::Mouse() {
 
 }
 
+void Mouse::pressDown()
+{
+    INPUT pressedDown = {};
+    pressedDown.type = INPUT_MOUSE;
+    pressedDown.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+
+    INPUT inputs[] = { pressedDown };
+
+    SendInput(1, inputs, sizeof(pressedDown));
+}
+
+void Mouse::pressUp()
+{
+    INPUT pressedUp = {};
+    pressedUp.type = INPUT_MOUSE;
+    pressedUp.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+    INPUT inputs[] = { pressedUp };
+
+    SendInput(1, inputs, sizeof(pressedUp));
+}
+
 void Mouse::click() {
     INPUT pressedDown = {};
     pressedDown.type = INPUT_MOUSE;

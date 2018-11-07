@@ -5,6 +5,7 @@ using namespace std::chrono;
 
 std::array<std::vector<Input::Callback>, Input::MAX_KEYS> Input::_callbacks;
 std::array<std::chrono::time_point<std::chrono::system_clock>, Input::MAX_KEYS> Input::_lastPerform;
+std::function<void(char)> Input::_anyKeyPressedCallback;
 bool Input::_shouldRun = true;
 
 Input::Input() {  
@@ -68,7 +69,11 @@ bool Input::isPressed(char key) {
 
 void Input::perform(char key) {
     _lastPerform[key] = system_clock::now();
-
+    if (_anyKeyPressedCallback)
+    {
+        _anyKeyPressedCallback(key);
+        _anyKeyPressedCallback = {};
+    }
     for (auto& cb : _callbacks[key]) {
         cb();
     }
@@ -87,14 +92,15 @@ void Input::onKeyPressed(char key, Callback cb) {
         key = key - 'a' + 'A';
     }
 
-    if ('A' <= key && key <= 'Z') {
-        _callbacks[key].push_back(cb);
-    }
-    else if ('0' <= key && key <= '9') {
+    if (('A' <= key && key <= 'Z') || ('0' <= key && key <= '9')) {
         _callbacks[key].push_back(cb);
     }
     else{
         Logger::error("Input::onKeyPressed", "Bad key code: " + key);
     }
-    
+}
+
+void Input::onAnyKeyPressed(std::function<void(char)> cb)
+{
+    _anyKeyPressedCallback = cb;
 }

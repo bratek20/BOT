@@ -7,6 +7,8 @@ class Mouse {
 public:
     Mouse();
 
+    void pressDown();
+    void pressUp();
     void click();
 
     Point getPosition();

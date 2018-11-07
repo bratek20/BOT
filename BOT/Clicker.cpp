@@ -6,8 +6,9 @@ using namespace std::chrono;
 
 void Clicker::init() {
     BOT::input.onKeyPressed('e', std::bind(&Clicker::changeEnableStatus, this));
-    BOT::input.onLeftMouseClick(std::bind(&Clicker::saveClick, this));
+    //BOT::input.onLeftMouseClick(std::bind(&Clicker::saveClick, this));
     BOT::input.onKeyPressed('r', std::bind(&Clicker::repeatClicks, this));
+    BOT::input.onKeyPressed('b', std::bind(&Clicker::saveClick, this));
 }
 
 void Clicker::changeEnableStatus() {
@@ -22,13 +23,34 @@ void Clicker::changeEnableStatus() {
 }
 
 void Clicker::saveClick() {
-    if (_savingEnabled) {
-        _clicks.push_back({ BOT::mouse.getPosition(), system_clock::now()});
-        Logger::info("Clicker::saveClick()", _clicks.back().first);
+    unsigned int waitTime = 1167;
+    unsigned int roundTime = 2000;
+    Point holdPoint{ 800,600 };
+    Point returnPoint{ 830,919 };
+    Point startGamePoint{ 955,427 };
+
+    while (_savingEnabled)
+    {
+        BOT::mouse.setPosition(holdPoint);
+        BOT::mouse.pressDown();
+        Sleep(waitTime);
+        BOT::mouse.pressUp();  
+
+        /*Sleep(100);
+        BOT::mouse.setPosition(returnPoint);
+        BOT::mouse.click();
+        Sleep(200);
+
+        BOT::mouse.setPosition(startGamePoint);
+        BOT::mouse.click();*/
+        Sleep(roundTime);
     }
 }
 
 void Clicker::repeatClicks() {
+    Logger::info("Clicker::repeatClicks()", BOT::mouse.getPosition());
+    return;
+
     if (_clicks.empty()) {
         Logger::error("Clicker::repeatClicks()", "no clicks saved!");
         return;
