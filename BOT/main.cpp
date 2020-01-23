@@ -7,10 +7,10 @@
 int main() {
     SetProcessDPIAware();
 
-    //BOT::addProgram(std::make_unique<IconFinder>());
+    BOT::addProgram(std::make_unique<IconFinder>());
     //BOT::addProgram(std::make_unique<KeyLogger>());
     //BOT::addProgram(std::make_unique<Clicker>());
-    BOT::addProgram(std::make_unique<Macro>());
+    //BOT::addProgram(std::make_unique<Macro>());
 
     bool exitPressed = false;
     auto exit = [&exitPressed]() {exitPressed = true; };

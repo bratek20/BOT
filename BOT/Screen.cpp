@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <string>
 
+using namespace std;
+
 Screen::Screen() {   
     RECT rect;
     GetWindowRect(GetDesktopWindow(), &rect);
@@ -104,15 +106,15 @@ Point Screen::find(const BmpRect& rect) {
     static const int SECTIONS = 6;
 
     int offX = _width / SECTIONS;
-    std::future<Point> ans[SECTIONS];
-    std::thread threads[SECTIONS];
+    future<Point> ans[SECTIONS];
+    thread threads[SECTIONS];
     for (int startX = 0, endX = offX, i=0; i < SECTIONS; startX += offX, endX += offX, i++) {
-        std::promise<Point> prom;
+        promise<Point> prom;
         ans[i] = prom.get_future();
-        threads[i] = std::thread(findInArea, std::move(prom), std::ref(*this), startX, endX, std::ref(rect) );
+        threads[i] = thread(findInArea, move(prom), ref(*this), startX, endX, ref(rect) );
     }
 
-    std::vector<Point> points;
+    vector<Point> points;
     for (int i = 0; i < SECTIONS; i++) {
         threads[i].join();
         auto point = ans[i].get();
@@ -121,14 +123,14 @@ Point Screen::find(const BmpRect& rect) {
         }
     }
 
-    Logger::info("Screen::find", "founded " + std::to_string(points.size()) + " points");
+    Logger::info("Screen::find", "founded " + to_string(points.size()) + " points");
     if (!points.empty()) {
         return points[0];
     }
     return Point::NONE;
 }
 
-void Screen::findInArea(std::promise<Point> && prom, const Screen& screen, int startX, int endX,  const BmpRect& rect) {
+void Screen::findInArea(promise<Point> && prom, const Screen& screen, int startX, int endX,  const BmpRect& rect) {
     endX = min(endX, screen.width() - rect.width());
 
     for (int y = 0; y < screen.height() - rect.height(); y++) {

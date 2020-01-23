@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <mmsystem.h>
 
+using namespace std;
+
 Audio::~Audio() {
     while (!_threads.empty()) {
         _threads.front().join();
@@ -11,7 +13,7 @@ Audio::~Audio() {
 }
 
 void Audio::play() {
-    _threads.push_back(std::thread(playSound));
+    _threads.push_back(thread(playSound));
     while (_threads.size() > MAX_THREADS) {
         _threads.front().join();
         _threads.pop_front();

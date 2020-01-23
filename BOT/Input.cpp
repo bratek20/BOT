@@ -1,15 +1,16 @@
 #include "Input.h"
 #include "Logger.h"
 
-using namespace std::chrono;
+using namespace std;
+using namespace chrono;
 
-std::array<std::vector<Input::Callback>, Input::MAX_KEYS> Input::_callbacks;
-std::array<std::chrono::time_point<std::chrono::system_clock>, Input::MAX_KEYS> Input::_lastPerform;
-std::function<void(char)> Input::_anyKeyPressedCallback;
+array<vector<Input::Callback>, Input::MAX_KEYS> Input::_callbacks;
+array<time_point<system_clock>, Input::MAX_KEYS> Input::_lastPerform;
+function<void(char)> Input::_anyKeyPressedCallback;
 bool Input::_shouldRun = true;
 
 Input::Input() {  
-    _t = std::thread(run);
+    _t = thread(run);
 }
 
 Input::~Input() {
@@ -100,7 +101,7 @@ void Input::onKeyPressed(char key, Callback cb) {
     }
 }
 
-void Input::onAnyKeyPressed(std::function<void(char)> cb)
+void Input::onAnyKeyPressed(function<void(char)> cb)
 {
     _anyKeyPressedCallback = cb;
 }
