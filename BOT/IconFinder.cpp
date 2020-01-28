@@ -39,6 +39,7 @@ void IconFinder::startSearching() {
     BOT::screen.update();
     auto start = system_clock::now();
 
+    Logger::info("IconFinder::startSearching()", "find called");
     auto p = BOT::screen.find(_rect);
 
     auto end = system_clock::now();

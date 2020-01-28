@@ -18,7 +18,12 @@ struct Rect {
     int width() const {
         return p2.x - p1.x + 1;
     }
+    
     int height() const {
         return p2.y - p1.y + 1;
+    }
+
+    int area() const {
+        return width() * height();
     }
 };

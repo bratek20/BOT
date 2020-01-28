@@ -132,6 +132,7 @@
     <ClCompile Include="Macro.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="Params.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Screen.cpp" />
   </ItemGroup>
@@ -150,6 +151,7 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Macro.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Params.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Rect.h" />

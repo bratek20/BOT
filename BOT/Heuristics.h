@@ -2,27 +2,32 @@
 #include "BOT.h"
 #include "Screen.h"
 #include "BmpRect.h"
+#include "Params.h"
 
 /* !!! not always works !!!*/
 class Heuristics {
 public:
     static bool matchRect(const Point& startPoint, const BmpRect& rect) {
         int hit = 0, cnt=0;
-        for (int y = startPoint.y; y <= startPoint.y + rect.height(); y++) {
-            for (int x = startPoint.x; x <= startPoint.x + rect.width(); x++, cnt++) {
+        int area = rect.area();
+        auto matches = [area](int num) {
+            return (float)num / area >= Params::MATCH_THRESHOLD;
+        };
+
+        for (int y = startPoint.y; y < startPoint.y + rect.height(); y++) {
+            for (int x = startPoint.x; x < startPoint.x + rect.width(); x++) {
                 if (BOT::screen.colorAt(x, y) == rect.colorAt(x - startPoint.x, y - startPoint.y)) {
                     hit++;
                 }
-                if (cnt > 10 && hit * 2 < cnt) {
+                cnt++;
+
+                int possibleBest = hit + area - cnt;
+                if (!matches(possibleBest)) {
                     return false;
                 }
             }
         }
-        int min = rect.width() * rect.height() * 95 / 100;
-        if (cnt > min) {
-            return true;
-        }
-        return false;
+        return matches(hit);
     }
 
     static bool matchRectBySum(const Point& startPoint, const BmpRect& rect) {

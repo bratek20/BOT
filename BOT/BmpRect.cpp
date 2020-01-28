@@ -11,7 +11,7 @@ BmpRect::BmpRect() {
 }
 
 BmpRect::BmpRect(Point _p1, Point _p2) : Rect(_p1, _p2) {
-    _size = width() * height();
+    _size = area();
     _colors = new Color[_size];
     _colorSum = BOT::screen.colorSumAtRect(*this);
 

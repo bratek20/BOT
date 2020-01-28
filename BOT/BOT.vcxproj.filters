@@ -18,6 +18,9 @@
     <Filter Include="Pliki źródłowe\Programs">
       <UniqueIdentifier>{3a280e67-2f81-4007-b8c5-835e712e2d22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki źródłowe\CUDA">
+      <UniqueIdentifier>{5558f067-ae7a-4e84-9e19-3d55c9a835d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -55,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="Macro.cpp">
       <Filter>Pliki źródłowe\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Params.cpp">
+      <Filter>Pliki źródłowe\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,12 +116,15 @@
       <Filter>Pliki źródłowe\Programs</Filter>
     </ClInclude>
     <ClInclude Include="kernel.h">
-      <Filter>Pliki źródłowe</Filter>
+      <Filter>Pliki źródłowe\CUDA</Filter>
+    </ClInclude>
+    <ClInclude Include="Params.h">
+      <Filter>Pliki źródłowe\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="kernel.cu">
-      <Filter>Pliki źródłowe</Filter>
+      <Filter>Pliki źródłowe\CUDA</Filter>
     </CudaCompile>
   </ItemGroup>
 </Project>

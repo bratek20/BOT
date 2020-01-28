@@ -136,7 +136,7 @@ void Screen::findInArea(promise<Point> && prom, const Screen& screen, int startX
     for (int y = 0; y < screen.height() - rect.height(); y++) {
         for (int x = startX; x < endX; x++) {
             Point p = Point(x, y);
-            if (Heuristics::matchRectBySum(p, rect)) {
+            if (Heuristics::matchRect(p, rect)) {
                 prom.set_value(p);
                 return;
             }
