@@ -109,5 +109,13 @@
     <ClInclude Include="Macro.h">
       <Filter>Pliki źródłowe\Programs</Filter>
     </ClInclude>
+    <ClInclude Include="kernel.h">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu">
+      <Filter>Pliki źródłowe</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>
