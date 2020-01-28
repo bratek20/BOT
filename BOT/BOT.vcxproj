@@ -142,7 +142,6 @@
     <ClInclude Include="BOT.h" />
     <ClInclude Include="Clicker.h" />
     <ClInclude Include="Color.h" />
-    <ClInclude Include="Heuristics.h" />
     <ClInclude Include="IconFinder.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="kernel.h" />

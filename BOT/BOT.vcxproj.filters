@@ -91,9 +91,6 @@
     <ClInclude Include="BmpRect.h">
       <Filter>Pliki źródłowe\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Heuristics.h">
-      <Filter>Pliki źródłowe\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Keyboard.h">
       <Filter>Pliki źródłowe\Core</Filter>
     </ClInclude>

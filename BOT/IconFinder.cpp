@@ -2,7 +2,6 @@
 #include "BOT.h"
 #include "BmpRect.h"
 #include "Logger.h"
-#include "Heuristics.h"
 #include <string>
 
 void IconFinder::init() {

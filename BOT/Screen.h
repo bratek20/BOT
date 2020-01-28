@@ -1,19 +1,15 @@
 #pragma once
 #include <future>
+
 #include "Point.h"
 #include "Color.h"
-
-struct Rect;
-class BmpRect;
+#include "BmpRect.h"
 
 class Screen {
     BYTE* _screen;
     Color* _colorSums;
     int _width;
     int _height;
-
-    void updateColorSums();
-    static void findInArea(std::promise<Point> && prom, const Screen& screen, int startX, int endX, const BmpRect& rect);
 
 public:
     Screen();
@@ -31,4 +27,12 @@ public:
 
     int width() const { return _width; }
     int height() const { return _height; }
+
+private:
+    void findInArea(std::promise<Point> && prom, int startX, int endX, const BmpRect& rect);
+
+    void updateColorSums();
+
+    bool matchRect(const Point& startPoint, const BmpRect& rect);
+    bool matchRectBySum(const Point& startPoint, const BmpRect& rect);
 };

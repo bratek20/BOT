@@ -1,6 +1,7 @@
 #include "Screen.h"
 #include "Logger.h"
-#include "Heuristics.h"
+#include "Params.h"
+
 #include <cstdio>
 #include <string>
 
@@ -111,7 +112,7 @@ Point Screen::find(const BmpRect& rect) {
     for (int startX = 0, endX = offX, i=0; i < SECTIONS; startX += offX, endX += offX, i++) {
         promise<Point> prom;
         ans[i] = prom.get_future();
-        threads[i] = thread(findInArea, move(prom), ref(*this), startX, endX, ref(rect) );
+        threads[i] = thread(&Screen::findInArea, this, move(prom), startX, endX, ref(rect) );
     }
 
     vector<Point> points;
@@ -130,13 +131,13 @@ Point Screen::find(const BmpRect& rect) {
     return Point::NONE;
 }
 
-void Screen::findInArea(promise<Point> && prom, const Screen& screen, int startX, int endX,  const BmpRect& rect) {
-    endX = min(endX, screen.width() - rect.width());
+void Screen::findInArea(promise<Point> && prom, int startX, int endX,  const BmpRect& rect) {
+    endX = min(endX, width() - rect.width());
 
-    for (int y = 0; y < screen.height() - rect.height(); y++) {
+    for (int y = 0; y < height() - rect.height(); y++) {
         for (int x = startX; x < endX; x++) {
             Point p = Point(x, y);
-            if (Heuristics::matchRect(p, rect)) {
+            if (matchRect(p, rect)) {
                 prom.set_value(p);
                 return;
             }
@@ -144,4 +145,37 @@ void Screen::findInArea(promise<Point> && prom, const Screen& screen, int startX
     }
 
     prom.set_value(Point::NONE);
+}
+
+bool Screen::matchRect(const Point& startPoint, const BmpRect& rect) {
+    int hit = 0, cnt = 0;
+    int area = rect.area();
+    auto matches = [area](int num) {
+        return (float)num / area >= Params::MATCH_THRESHOLD;
+    };
+
+    for (int y = startPoint.y; y < startPoint.y + rect.height(); y++) {
+        for (int x = startPoint.x; x < startPoint.x + rect.width(); x++) {
+            if (colorAt(x, y) == rect.colorAt(x - startPoint.x, y - startPoint.y)) {
+                hit++;
+            }
+            cnt++;
+
+            int possibleBest = hit + area - cnt;
+            if (!matches(possibleBest)) {
+                return false;
+            }
+        }
+    }
+    return matches(hit);
+}
+
+bool Screen::matchRectBySum(const Point& startPoint, const BmpRect& rect) {
+    Point endPoint = Point(startPoint.x + rect.width() - 1, startPoint.y + rect.height() - 1);
+    Color c = colorSumAtRect(Rect(startPoint, endPoint));
+
+    Color rectSum = rect.colorSum();
+    int size = rect.width() * rect.height();
+    static auto similar = [](int a, int b, int) { return a == b; };
+    return similar(c.r, rectSum.r, size) && similar(c.g, rectSum.g, size) && similar(c.b, rectSum.b, size);
 }

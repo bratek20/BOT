@@ -1,5 +1,4 @@
 #include "BmpRect.h"
-#include "Rect.h"
 #include "BOT.h"
 #include "Screen.h"
 #include "Logger.h"
