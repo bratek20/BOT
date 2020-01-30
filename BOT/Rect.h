@@ -9,9 +9,12 @@ struct Rect {
         p2 = Point::NONE;
     }
 
-    Rect(Point p1, Point p2) : p1(p1), p2(p2) {
+    Rect(Point _p1, Point _p2) : p1(_p1), p2(_p2) {
         if (p1.x > p2.x) {
-            std::swap(p1, p2);
+            std::swap(p1.x, p2.x);
+        }
+        if (p1.y > p2.y) {
+            std::swap(p1.y, p2.y);
         }
     }
 

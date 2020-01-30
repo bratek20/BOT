@@ -2,14 +2,14 @@
 #include "Rect.h"
 #include "Color.h"
 
-class Screen;
-
 class BmpRect : public Rect {
     Color* _colors;
     int _size;
     Color _colorSum;
 
 public:
+    friend class ScreenHelperCUDA;
+
     BmpRect();
 
     BmpRect(Point _p1, Point _p2);

@@ -1,6 +1,7 @@
 #include "Screen.h"
 #include "Logger.h"
 #include "Params.h"
+#include "ScreenHelperCuda.h"
 
 #include <cstdio>
 #include <string>
@@ -12,11 +13,20 @@ Screen::Screen() {
     GetWindowRect(GetDesktopWindow(), &rect);
     _width = rect.right;
     _height = rect.bottom;
-    _colorSums = new Color[_width * _height];
+    _screen = new Color[size()];
+    _colorSums = new Color[size()];
+
+    Logger::info("Screen::Screen()", "width: " + to_string(_width) + ", height: " + to_string(_height));
+}
+
+Screen::~Screen() {
+    delete[] _screen;
+    delete[] _colorSums;
 }
 
 void Screen::update() {
     HDC hdc, hdcTemp;
+    BYTE* rawScreen;
 
     hdc = GetDC(HWND_DESKTOP);
 
@@ -31,10 +41,19 @@ void Screen::update() {
     bitmap.bmiHeader.biSizeImage = _width * 4 * _height;
     bitmap.bmiHeader.biClrUsed = 0;
     bitmap.bmiHeader.biClrImportant = 0;
-    HBITMAP hBitmap2 = CreateDIBSection(hdcTemp, &bitmap, DIB_RGB_COLORS, (void**)(&_screen), NULL, NULL);
+    HBITMAP hBitmap2 = CreateDIBSection(hdcTemp, &bitmap, DIB_RGB_COLORS, (void**)(&rawScreen), NULL, NULL);
     SelectObject(hdcTemp, hBitmap2);
     BitBlt(hdcTemp, 0, 0, _width, _height, hdc, 0, 0, SRCCOPY);
 
+    for (int idx = 0; idx < size(); idx++) {
+        int x = idx % _width;
+        int y = idx / _width;
+        int i = _height - 1 - y;
+        int j = x;
+        int k = (i * _width + j) * 4;
+
+        _screen[idx] = Color(rawScreen[k + 2], rawScreen[k + 1], rawScreen[k]);
+    }
     updateColorSums();
 }
 
@@ -56,12 +75,8 @@ void Screen::updateColorSums() {
 }
 
 Color Screen::colorAt(int x, int y) const {
-    int i = _height - 1 - y;
-    int j = x;
-
-    int k = (i * _width + j) * 4;
-
-    return Color(_screen[k + 2], _screen[k + 1], _screen[k]);
+    int idx = y * width() + x;
+    return _screen[idx];
 }
 
 Color Screen::colorAt(const Point& p) const {
@@ -88,6 +103,8 @@ Color Screen::colorSumAtRect(const Rect& rect) const {
 }
 
 void Screen::save() {
+    update();
+
     FILE* fp;
     fopen_s(&fp, "screenshot.ppm", "w");
 
@@ -95,7 +112,7 @@ void Screen::save() {
     for (int y = 0; y < _height; y++) {
         for (int x = 0; x < _width; x++) {
             Color color = colorAt(x, y);
-            fprintf(fp, "%4d%4d%4d", color.r, color.g, color.b);
+            fprintf(fp, "%4d%4d%4d", color.ir(), color.ig(), color.ib());
         }
     }
 
@@ -124,7 +141,7 @@ Point Screen::find(const BmpRect& rect) {
         }
     }
 
-    Logger::info("Screen::find", "founded " + to_string(points.size()) + " points");
+    Logger::info("Screen::find", "found " + to_string(points.size()) + " points");
     if (!points.empty()) {
         return points[0];
     }

@@ -12,7 +12,7 @@ public:
 private:
     void addPoint();
     void captureRect();
-    void startSearching();
+    void startSearching(bool useCUDA);
 
     BmpRect _rect;
     std::vector<Point> _points;

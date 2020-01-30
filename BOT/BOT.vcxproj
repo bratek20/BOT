@@ -144,7 +144,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="IconFinder.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="kernel.h" />
+    <ClInclude Include="ScreenHelperCuda.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="KeyLogger.h" />
     <ClInclude Include="Logger.h" />
@@ -157,7 +157,7 @@
     <ClInclude Include="Screen.h" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="ScreenHelperCuda.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

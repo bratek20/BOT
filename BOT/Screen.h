@@ -6,13 +6,16 @@
 #include "BmpRect.h"
 
 class Screen {
-    BYTE* _screen;
+    Color* _screen;
     Color* _colorSums;
     int _width;
     int _height;
 
 public:
+    friend class ScreenHelperCUDA;
+
     Screen();
+    ~Screen();
 
     void update();
 
@@ -27,6 +30,7 @@ public:
 
     int width() const { return _width; }
     int height() const { return _height; }
+    int size() const { return width() * height(); }
 
 private:
     void findInArea(std::promise<Point> && prom, int startX, int endX, const BmpRect& rect);

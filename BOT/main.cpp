@@ -4,10 +4,7 @@
 #include "Clicker.h"
 #include "Macro.h"
 
-#include "kernel.h"
-
 int main() {
-    testMe();
     SetProcessDPIAware();
 
     BOT::addProgram(std::make_unique<IconFinder>());

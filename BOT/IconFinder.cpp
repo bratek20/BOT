@@ -2,12 +2,18 @@
 #include "BOT.h"
 #include "BmpRect.h"
 #include "Logger.h"
+#include "ScreenHelperCuda.h"
+
 #include <string>
+
+using namespace std;
 
 void IconFinder::init() {
     BOT::input.onKeyPressed('p', std::bind(&IconFinder::addPoint, this));
     BOT::input.onKeyPressed('c', std::bind(&IconFinder::captureRect, this));
-    BOT::input.onKeyPressed('s', std::bind(&IconFinder::startSearching, this));
+    BOT::input.onKeyPressed('s', std::bind(&IconFinder::startSearching, this, false));
+    BOT::input.onKeyPressed('d', std::bind(&IconFinder::startSearching, this, true));
+    BOT::input.onKeyPressed('z', std::bind(&Screen::save, &BOT::screen));
 }
 
 void IconFinder::addPoint() {
@@ -32,14 +38,14 @@ void IconFinder::captureRect() {
     _points.clear();
 }
 
-void IconFinder::startSearching() {
+void IconFinder::startSearching(bool useCUDA) {
     using namespace std::chrono;
 
     BOT::screen.update();
     auto start = system_clock::now();
 
-    Logger::info("IconFinder::startSearching()", "find called");
-    auto p = BOT::screen.find(_rect);
+    Logger::info("IconFinder::startSearching()", "find called, use CUDA? " + to_string(useCUDA));
+    auto p = useCUDA ? ScreenHelperCUDA::find(_rect) : BOT::screen.find(_rect);
 
     auto end = system_clock::now();
 

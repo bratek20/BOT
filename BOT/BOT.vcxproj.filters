@@ -112,15 +112,15 @@
     <ClInclude Include="Macro.h">
       <Filter>Pliki źródłowe\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="kernel.h">
-      <Filter>Pliki źródłowe\CUDA</Filter>
-    </ClInclude>
     <ClInclude Include="Params.h">
       <Filter>Pliki źródłowe\Core</Filter>
     </ClInclude>
+    <ClInclude Include="ScreenHelperCuda.h">
+      <Filter>Pliki źródłowe\CUDA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu">
+    <CudaCompile Include="ScreenHelperCuda.cu">
       <Filter>Pliki źródłowe\CUDA</Filter>
     </CudaCompile>
   </ItemGroup>
