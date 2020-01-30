@@ -43,8 +43,10 @@ void IconFinder::startSearching(bool useCUDA) {
 
     BOT::screen.update();
     auto start = system_clock::now();
-
+    
+    Logger::gap();
     Logger::info("IconFinder::startSearching()", "find called, use CUDA? " + to_string(useCUDA));
+    Logger::info("IconFinder::startSearching()", "rect area: " + to_string(_rect.area()));
     auto p = useCUDA ? ScreenHelperCUDA::find(_rect) : BOT::screen.find(_rect);
 
     auto end = system_clock::now();

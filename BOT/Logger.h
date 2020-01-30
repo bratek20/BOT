@@ -14,4 +14,8 @@ public:
     static void error(const char* src, const T& msg) {
         std::cerr << src << " | " << msg << std::endl;
     }
+
+    static void gap() {
+        std::cout << std::endl;
+    }
 };

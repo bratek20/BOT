@@ -6,15 +6,19 @@
 
 using namespace std;
 
-__constant__ float MATCH_THRESHOLD = 0.95;
+__constant__ float MATCH_THRESHOLD;
 
 __device__ int matches(int num, int area) {
     return (float)num / area >= MATCH_THRESHOLD;
 };
 
-__device__ dim3 colorAt(float* tab, dim3 tabSize, int x, int y) {
+__device__ float3 colorAt(float* tab, dim3 tabSize, int x, int y) {
     int idx = y * tabSize.x + x;
-    return dim3(tab[3 * idx], tab[3 * idx + 1], tab[3 * idx + 2]);
+    float3 ans;
+    ans.x = tab[3 * idx];
+    ans.x = tab[3 * idx + 1];
+    ans.x = tab[3 * idx + 2];
+    return ans;
 }
 
 __global__ void matchRect(float* screen, dim3 screenSize, float* rect, dim3 rectSize, int* ans) {
@@ -23,16 +27,14 @@ __global__ void matchRect(float* screen, dim3 screenSize, float* rect, dim3 rect
     int startPointY = idx / screenSize.x;
     int startPointX = idx % screenSize.x;
     int rectArea = rectSize.x * rectSize.y;
-    //printf("%f", MATCH_THRESHOLD);
-
     if (idx >= screenSize.x * screenSize.y) {
         return;
     }
 
     for (int y = startPointY; y < startPointY + rectSize.y && y < screenSize.y; y++) {
         for (int x = startPointX; x < startPointX + rectSize.x && x < screenSize.x; x++) {
-            dim3 sc = colorAt(screen, screenSize, x, y);
-            dim3 rc = colorAt(rect, rectSize, x - startPointX, y - startPointY);
+            float3 sc = colorAt(screen, screenSize, x, y);
+            float3 rc = colorAt(rect, rectSize, x - startPointX, y - startPointY);
             if (sc.x == rc.x && sc.y == rc.y && sc.z == rc.z) {
                 hit++;
             }
@@ -40,7 +42,6 @@ __global__ void matchRect(float* screen, dim3 screenSize, float* rect, dim3 rect
 
             int possibleBest = hit + rectArea - cnt;
             if (!matches(possibleBest, rectArea)) {
-                //printf("idx: %d, hit: %d, cnt: %d, possible best: %d, area: %d\n", idx, hit, cnt, possibleBest, area);
                 ans[idx] = 0;
                 return;
             }
@@ -48,7 +49,6 @@ __global__ void matchRect(float* screen, dim3 screenSize, float* rect, dim3 rect
     }
     
     ans[idx] = matches(hit, rectArea);
-    //printf("end idx: %d, hit: %d, cnt: %d, rectArea: %d, ans: %d\n", idx, hit, cnt, rectArea, ans[idx]);
 }
 
 constexpr int MAX_ANS_SIZE = 1920 * 1080 * 42;
@@ -73,7 +73,7 @@ Point ScreenHelperCUDA::find(const BmpRect& rect) {
     float* d_rect = mallocAndCpy(h_rect, rectSize.x * rectSize.y * 3);
     int* d_ans = checkMalloc<int>(ansSize);
 
-    //cudaMemcpyToSymbol(MATCH_THRESHOLD, &Params::MATCH_THRESHOLD, sizeof(float));
+    cudaMemcpyToSymbol(MATCH_THRESHOLD, &Params::MATCH_THRESHOLD, sizeof(float));
 
     int threads = 512;
     int blocks = static_cast<int>(ceil(screen.size() / threads));
