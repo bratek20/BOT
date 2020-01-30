@@ -35,9 +35,8 @@ __global__ void matchRect(float* screen, dim3 screenSize, float* rect, dim3 rect
         for (int x = startPointX; x < startPointX + rectSize.x && x < screenSize.x; x++) {
             float3 sc = colorAt(screen, screenSize, x, y);
             float3 rc = colorAt(rect, rectSize, x - startPointX, y - startPointY);
-            if (sc.x == rc.x && sc.y == rc.y && sc.z == rc.z) {
-                hit++;
-            }
+            
+            hit += sc.x == rc.x && sc.y == rc.y && sc.z == rc.z;
             cnt++;
 
             int possibleBest = hit + rectArea - cnt;
