@@ -8,6 +8,8 @@ In main function three bot programs can be added:
 3) Clicker - enable save clicking and perform some left mouse clicks. Now you can turn on repeating process to repeat all your previous clicks. 
 
 IconFinder is enabled by default. 
+In file Params.cpp there is parameter MATCH_THRESHOLD. It is percentage value when program tells that rectangle fits what we looked for.
+
 Controls:
 p - record point position
 c - capture rectangle between two last recorded positions
