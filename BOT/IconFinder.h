@@ -11,8 +11,9 @@ public:
 
 private:
     void addPoint();
+    void addPoints32();
     void captureRect();
-    void startSearching(bool useCUDA);
+    void startSearching(bool useCUDA, bool enableCUDAfast);
 
     BmpRect _rect;
     std::vector<Point> _points;

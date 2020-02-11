@@ -1,5 +1,7 @@
 #include "Point.h"
 
+using namespace std;
+
 Point Point::NONE = Point(-1, -1);
 
 Point::Point() {}
@@ -13,7 +15,19 @@ bool Point::operator!=(const Point& p) {
     return !(*this == p);
 }
 
+Point Point::operator+(const Point& p) {
+    return Point(x + p.x, y + p.y);
+}
+
+Point Point::operator-(const Point& p) {
+    return Point(x - p.x, y - p.y);
+}
+
+std::string Point::toString() const {
+    return "(" + to_string(x) + ", " + to_string(y) + ")";
+}
+
 std::ostream& operator <<(std::ostream& out, const Point& p) {
-    out << "x: " << p.x << ", y: " << p.y;
+    out << p.toString();
     return out;
 }

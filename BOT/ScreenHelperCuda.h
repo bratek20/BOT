@@ -9,7 +9,7 @@
 
 class ScreenHelperCUDA {
 public:
-    static Point find(const BmpRect& rect);
+    static Point find(const BmpRect& rect, bool forceSlow);
 
 private:
     template<typename T>
