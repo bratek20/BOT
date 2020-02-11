@@ -15,6 +15,8 @@ p - record point position
 c - capture rectangle between two last recorded positions
 s - search with CPU
 d - search with CUDA
+f - search with CUDA faster function
+l - record two points that create square 32x32
 0 - close the program
 
 Search operations automatically moves mouse to the found position.
